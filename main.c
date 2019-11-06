@@ -29,6 +29,82 @@ struct Node* Insert(struct Node* root,int value){
 	return root;
 }
 
+struct Node* Search(struct Node* root,int value){
+
+	if(root->data == value) return root;
+	else if(value < root->data && root->left != NULL) root->left = Search(root->left,value);
+	else if(value > root->data && root->right != NULL) root->right = Search(root->right,value);
+	else{
+
+	printf("The value %d you are looking for is not present in the tree!",value);
+	exit(1);
+	}
+
+}
+
+
+struct Node* MinNode(struct Node* root){
+
+	while(root->left != NULL)  root = root->left;
+
+	return root;
+
+}
+
+struct Node* MaxNode(struct Node* root){
+
+	while(root->right != NULL) root = root->right;
+
+	return root;
+}
+
+struct Node* RemoveNode(struct Node* root, int value) {
+
+	if (root == NULL) {
+
+		printf("The tree is empty!");
+		return root;
+	}
+	else if (value < root->data) root->left = RemoveNode(root->left,value);
+	else if (value > root->data) root->right = RemoveNode(root->right, value);
+	else { // i have found the desired element
+
+		// Leaf node
+		if (root->left == NULL && root->right == NULL) {
+
+			free(root);
+			root = NULL;
+
+		}
+		// Has One Child
+		else if (root->left == NULL) {
+
+			struct Node* aux = root;
+			root = root->right;
+			free(aux);
+
+		}
+		else if (root->right == NULL) {
+
+			struct Node* aux = root;
+			root = root->left;
+			free(aux);
+
+		}
+		// 2 children
+		else {
+
+			struct Node* aux = MinNode(root->right);
+			root->data = aux->data;
+			root->right = RemoveNode(root->right,aux->data);
+		}
+	}
+
+	return root;
+
+}
+
+
 
 void Preorder(struct Node* start){
 
@@ -44,7 +120,10 @@ int main(){
 	root = Insert(root,5);
 	root = Insert(root,10);
 	root = Insert(root,2);
+	root = Insert(root,1);
 	root = Insert(root,7);
+	root = Insert(root,50);
+	root = RemoveNode(root,2);
 	Preorder(root);
 	return 0;
 }
