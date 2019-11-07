@@ -148,16 +148,29 @@ struct Node* RightRotate(struct Node* root){
 	return aux;
 
 }
+
+struct Node* LeftRight(struct Node* root){
+
+	root->left = LeftRotate(root->left);
+	return RightRotate(root);
+
+}
+struct Node* RightLeft(struct Node* root){
+
+	root->right = RightRotate(root->right);
+	return LeftRotate(root);
+}
 int main(){
 
 	struct Node* root = NULL;
-	root = Insert(root,15);
 	root = Insert(root,10);
-	root = Insert(root,5);
-	//Preorder(root);
+	root = Insert(root,8);
+	root = Insert(root,9);
+
 	printf("height before rotation: %d\n",Height(root->left));
-	root = RightRotate(root);
-	//Preorder(root);
-	printf("height after rotation: %d",Height(root->left));
+	root = LeftRight(root);
+
+	printf("height after rotation: %d",Height(root->right));
 	return 0;
+
 }
