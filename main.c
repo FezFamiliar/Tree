@@ -6,6 +6,7 @@ struct Node{
 	int data;
 	struct Node* left;
 	struct Node* right;
+	struct Node* parent;
 
 };
 
@@ -160,17 +161,45 @@ struct Node* RightLeft(struct Node* root){
 	root->right = RightRotate(root->right);
 	return LeftRotate(root);
 }
+int abs(int a){
+
+	return	a < 0 ? -a : a;
+}
+void CheckBalance(struct Node* root){
+
+	int _leftH = Height(root->left);
+	int _rightH = Height(root->right);
+	printf("left subtree height: %d\n",_leftH);
+	printf("Right subtree height: %d",_rightH);
+	if(abs(_leftH - _rightH) >= 2) rebalance(root);
+	if(root->parent == NULL) return;
+	CheckBalance(root->parent);
+}
+
+
+void rebalance(struct Node* root){
+
+	if(Height(root->left) - Height(root->right) >= 2){
+
+		if(Height(root->left->left) > Height(root->left->right)){
+			root = RightRotate(root);
+		}
+		else root = LeftRight(root);
+	}
+	else
+	{
+	printf("its the other end");
+
+	}
+
+}
 int main(){
 
 	struct Node* root = NULL;
 	root = Insert(root,10);
-	root = Insert(root,8);
-	root = Insert(root,9);
-
-	printf("height before rotation: %d\n",Height(root->left));
-	root = LeftRight(root);
-
-	printf("height after rotation: %d",Height(root->right));
+	root = Insert(root,5);
+	root = Insert(root,2);
+	CheckBalance(root);
 	return 0;
 
 }
