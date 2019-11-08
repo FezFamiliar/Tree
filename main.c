@@ -10,7 +10,8 @@ struct Node{
 
 };
 
-
+void CheckBalance(struct Node* root);
+void Rebalance(struct Node* root);
 struct Node* CreateNode(int value){
 
 	struct Node* NewNode = (struct Node*)malloc(sizeof(struct Node));
@@ -27,6 +28,7 @@ struct Node* Insert(struct Node* root,int value){
 	else if(value < root->data) root->left = Insert(root->left,value);
 	else root->right = Insert(root->right,value);
 
+	CheckBalance(root);
 	return root;
 }
 
@@ -168,16 +170,16 @@ int abs(int a){
 void CheckBalance(struct Node* root){
 
 	int _leftH = Height(root->left);
-	int _rightH = Height(root->right);
+	int _rightH = Height(root->right);/*
 	printf("left subtree height: %d\n",_leftH);
-	printf("Right subtree height: %d",_rightH);
-	if(abs(_leftH - _rightH) >= 2) rebalance(root);
+	printf("Right subtree height: %d",_rightH);*/
+	if(abs(_leftH - _rightH) >= 2) Rebalance(root);
 	if(root->parent == NULL) return;
 	CheckBalance(root->parent);
 }
 
 
-void rebalance(struct Node* root){
+void Rebalance(struct Node* root){
 
 	if(Height(root->left) - Height(root->right) >= 2){
 
@@ -197,9 +199,10 @@ int main(){
 
 	struct Node* root = NULL;
 	root = Insert(root,10);
+	root = Insert(root,15);
 	root = Insert(root,5);
-	root = Insert(root,2);
-	CheckBalance(root);
+	root = Insert(root,20);
+	root = Insert(root,17);
 	return 0;
 
 }
