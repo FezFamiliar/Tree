@@ -30,12 +30,11 @@ struct Node* Insert(struct Node* root,int value){
 	if(root == NULL) root = CreateNode(value);
 	else if(value < root->data) root->left = Insert(root->left,value);
 	else if(value > root->data)root->right = Insert(root->right,value);
+	else {
+	printf("Duplicate values are not allowed!");
+	exit(1);
+	}
 
-
-
-	//int balance = CheckBalance(root);
-	//printf("%d",balance);
-	//exit(1);
 	if(CheckBalance(root) > 1 && value < root->left->data)
         	 return RightRotate(root);
 	if(CheckBalance(root) < -1 && value > root->right->data)
@@ -201,7 +200,8 @@ int main(){
     	root = Insert(root, 30);  
     	root = Insert(root, 40);  
     	root =Insert(root, 50);  
-    	root = Insert(root, 25);  
+    	root = Insert(root, 25); 
+	root = Insert(root,50); 
 	Preorder(root);
 	return 0;
 
