@@ -11,6 +11,7 @@ struct Node{
 
 };
 
+void usage(char* msg);
 int CheckBalance(struct Node* root);
 struct Node* LeftRotate(struct Node* root);
 struct Node* RightRotate(struct Node* root);
@@ -34,10 +35,7 @@ struct Node* Insert(struct Node* root,int value){
 	if(root == NULL) root = CreateNode(value);
 	else if(value < root->data) root->left = Insert(root->left,value);
 	else if(value > root->data)root->right = Insert(root->right,value);
-	else {
-	printf("Duplicate values are not allowed!");
-	exit(1);
-	}
+	else usage("Duplicate values are not allowed!");
 
 	if(CheckBalance(root) > 1 && value < root->left->data)
         	 return RightRotate(root);
@@ -56,11 +54,7 @@ struct Node* Search(struct Node* root,int value){
 	if(root->data == value) return root;
 	else if(value < root->data && root->left != NULL) root->left = Search(root->left,value);
 	else if(value > root->data && root->right != NULL) root->right = Search(root->right,value);
-	else{
-
-	printf("The value %d you are looking for is not present in the tree!",value);
-	exit(1);
-	}
+	else usage("The value is not present in the Tree!");
 
 }
 
@@ -146,9 +140,8 @@ int Height(struct Node* root){
 	int lh = Height(root->left);
 	int rh = Height(root->right);
 
-	//return (lh > rh) ? (lh + 1) : (rh + 1);
-	if(lh > rh) return (lh + 1);
-	else return (rh + 1);
+	return (lh > rh) ? (lh + 1) : (rh + 1);
+
 	}
 }
 
@@ -191,3 +184,8 @@ int CheckBalance(struct Node* root){
 	return (_leftH - _rightH);
 }
 
+void usage(char* msg){
+
+	printf("%s",msg);
+	exit(1);
+}
