@@ -6,12 +6,15 @@ struct Node{
 	int data;
 	struct Node* left;
 	struct Node* right;
-	struct Node* parent;
 
 };
 
-void CheckBalance(struct Node* root);
-void Rebalance(struct Node* root);
+int CheckBalance(struct Node* root);
+struct Node* LeftRotate(struct Node* root);
+struct Node* RightRotate(struct Node* root);
+struct Node* LeftRight(struct Node* root);
+struct Node* RightLeft(struct Node* root);
+
 struct Node* CreateNode(int value){
 
 	struct Node* NewNode = (struct Node*)malloc(sizeof(struct Node));
@@ -26,9 +29,22 @@ struct Node* Insert(struct Node* root,int value){
 
 	if(root == NULL) root = CreateNode(value);
 	else if(value < root->data) root->left = Insert(root->left,value);
-	else root->right = Insert(root->right,value);
+	else if(value > root->data)root->right = Insert(root->right,value);
 
-	CheckBalance(root);
+
+
+	//int balance = CheckBalance(root);
+	//printf("%d",balance);
+	//exit(1);
+	if(CheckBalance(root) > 1 && value < root->left->data)
+        	 return RightRotate(root);
+	if(CheckBalance(root) < -1 && value > root->right->data)
+	       	return LeftRotate(root);
+	if(CheckBalance(root) > 1 && value > root->left->data)
+		return LeftRight(root);
+	if(CheckBalance(root) < -1 && value < root->right->data)
+		return RightLeft(root);
+
 	return root;
 }
 
@@ -167,42 +183,26 @@ int abs(int a){
 
 	return	a < 0 ? -a : a;
 }
-void CheckBalance(struct Node* root){
+int CheckBalance(struct Node* root){
 
 	int _leftH = Height(root->left);
-	int _rightH = Height(root->right);/*
-	printf("left subtree height: %d\n",_leftH);
-	printf("Right subtree height: %d",_rightH);*/
-	if(abs(_leftH - _rightH) >= 2) Rebalance(root);
-	if(root->parent == NULL) return;
-	CheckBalance(root->parent);
+	int _rightH = Height(root->right);
+
+	return (_leftH - _rightH);
 }
 
 
-void Rebalance(struct Node* root){
 
-	if(Height(root->left) - Height(root->right) >= 2){
-
-		if(Height(root->left->left) > Height(root->left->right)){
-			root = RightRotate(root);
-		}
-		else root = LeftRight(root);
-	}
-	else
-	{
-	printf("its the other end");
-
-	}
-
-}
 int main(){
 
 	struct Node* root = NULL;
-	root = Insert(root,10);
-	root = Insert(root,15);
-	root = Insert(root,5);
-	root = Insert(root,20);
-	root = Insert(root,17);
+	 root = Insert(root, 10);  
+    	root = Insert(root, 20);  
+    	root = Insert(root, 30);  
+    	root = Insert(root, 40);  
+    	root =Insert(root, 50);  
+    	root = Insert(root, 25);  
+	Preorder(root);
 	return 0;
 
 }
